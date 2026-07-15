@@ -1,7 +1,12 @@
 import * as pdfjsLib from "pdfjs-dist";
 import { normalizePhone } from "./phoneNormalizer.js";
+import { createRequire } from "module";
+import { pathToFileURL } from "url";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+const require = createRequire(import.meta.url);
+pdfjsLib.GlobalWorkerOptions.workerSrc = pathToFileURL(
+  require.resolve("pdfjs-dist/build/pdf.worker.mjs")
+).href;
 
 const ARABIC_CHAR_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
