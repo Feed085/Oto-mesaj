@@ -134,25 +134,23 @@ export function parseLine(line: string): ParsedLine | null {
   return null;
 }
 
-function computeLineBreakThreshold(page: any): Promise<number> {
-  return page.getTextContent().then((content: any) => {
-    const yValues: number[] = [];
-    for (const item of content.items) {
-      if ("str" in item && item.str.trim().length > 0) {
-        yValues.push(item.transform[5]);
-      }
+function computeLineBreakThreshold(items: any[]): number {
+  const yValues: number[] = [];
+  for (const item of items) {
+    if ("str" in item && item.str.trim().length > 0) {
+      yValues.push(item.transform[5]);
     }
-    if (yValues.length < 2) return 2;
-    yValues.sort((a, b) => a - b);
-    const spacings: number[] = [];
-    for (let i = 1; i < yValues.length; i++) {
-      const d = Math.abs(yValues[i] - yValues[i - 1]);
-      if (d > 0.5) spacings.push(d);
-    }
-    if (spacings.length === 0) return 2;
-    const median = spacings[Math.floor(spacings.length / 2)];
-    return Math.max(median * 0.5, 2);
-  });
+  }
+  if (yValues.length < 2) return 2;
+  yValues.sort((a, b) => a - b);
+  const spacings: number[] = [];
+  for (let i = 1; i < yValues.length; i++) {
+    const d = Math.abs(yValues[i] - yValues[i - 1]);
+    if (d > 0.5) spacings.push(d);
+  }
+  if (spacings.length === 0) return 2;
+  const median = spacings[Math.floor(spacings.length / 2)];
+  return Math.max(median * 0.5, 2);
 }
 
 export async function extractTextFromPDF(
@@ -166,7 +164,7 @@ export async function extractTextFromPDF(
   for (let i = 1; i <= totalPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
-    const lineBreakThreshold = await computeLineBreakThreshold(page);
+    const lineBreakThreshold = computeLineBreakThreshold(content.items);
 
     let lastY: number | null = null;
     let pageText = "";
