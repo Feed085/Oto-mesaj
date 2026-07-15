@@ -1,19 +1,7 @@
 import * as pdfjsLib from "pdfjs-dist";
 import { normalizePhone } from "./phoneNormalizer.js";
 
-let workerReady: Promise<void> | null = null;
-
-async function initWorker() {
-  if (pdfjsLib.GlobalWorkerOptions.workerSrc) return;
-  const res = await fetch("https://unpkg.com/pdfjs-dist@4.8.69/build/pdf.worker.mjs");
-  const blob = new Blob([await res.arrayBuffer()], { type: "application/javascript" });
-  pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(blob);
-}
-
-function ensureWorker(): Promise<void> {
-  if (!workerReady) workerReady = initWorker();
-  return workerReady;
-}
+pdfjsLib.GlobalWorkerOptions.workerSrc = "";
 
 const ARABIC_CHAR_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
@@ -161,7 +149,6 @@ function computeLineBreakThreshold(items: any[]): number {
 export async function extractTextFromPDF(
   buffer: Buffer
 ): Promise<{ text: string; totalPages: number }> {
-  await ensureWorker();
   const uint8Array = new Uint8Array(buffer);
   const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
   const totalPages = pdf.numPages;
