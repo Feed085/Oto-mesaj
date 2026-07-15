@@ -49,64 +49,69 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
       style={style}
       className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-4 px-6 py-4 items-center h-full">
-        <div className="flex items-center gap-3 min-w-0">
-          <div
-            className={`
-              w-10 h-10 rounded-xl flex items-center justify-center shrink-0
-              ${
-                company.sent
-                  ? "bg-green-100 dark:bg-green-900/30"
-                  : "bg-gray-100 dark:bg-gray-700"
-              }
-            `}
-          >
-            <span className="text-lg">
-              {company.sent ? "✓" : "🏢"}
-            </span>
-          </div>
-          <div className="min-w-0">
-            <p
-              className="font-semibold text-gray-800 dark:text-gray-100 truncate"
-              dir={dir}
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center h-full">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
+          <div className="flex items-center gap-2 lg:gap-3 min-w-0">
+            <div
+              className={`
+                w-8 h-8 lg:w-10 lg:h-10 rounded-xl flex items-center justify-center shrink-0
+                ${
+                  company.sent
+                    ? "bg-green-100 dark:bg-green-900/30"
+                    : "bg-gray-100 dark:bg-gray-700"
+                }
+              `}
             >
-              {company.name}
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
-              ID: {company.id.slice(-8)}
-            </p>
+              <span className="text-sm lg:text-lg">
+                {company.sent ? "✓" : "🏢"}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p
+                className="font-semibold text-sm lg:text-base text-gray-800 dark:text-gray-100 truncate"
+                dir={dir}
+              >
+                {company.name}
+              </p>
+              <div className="flex items-center gap-1.5 lg:hidden mt-0.5">
+                <Phone className="w-3 h-3 text-gray-400 shrink-0" />
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                  {formatPhoneForDisplay(company.phone)}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <Phone className="w-4 h-4 text-gray-400 shrink-0" />
-          <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
-            {formatPhoneForDisplay(company.phone)}
-          </span>
-        </div>
-
-        <div className="hidden lg:block min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
-            <span className="text-xs text-gray-400 dark:text-gray-500">
-              Mesaj
+          <div className="hidden lg:flex items-center gap-2">
+            <Phone className="w-4 h-4 text-gray-400 shrink-0" />
+            <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
+              {formatPhoneForDisplay(company.phone)}
             </span>
           </div>
-          <p
-            className="text-sm text-gray-500 dark:text-gray-400 truncate"
-            dir="auto"
-          >
-            {company.message.slice(0, 80)}
-            {company.message.length > 80 ? "..." : ""}
-          </p>
+
+          <div className="hidden lg:block min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
+              <span className="text-xs text-gray-400 dark:text-gray-500">
+                Mesaj
+              </span>
+            </div>
+            <p
+              className="text-sm text-gray-500 dark:text-gray-400 truncate"
+              dir="auto"
+            >
+              {company.message.slice(0, 80)}
+              {company.message.length > 80 ? "..." : ""}
+            </p>
+          </div>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2 lg:gap-4 shrink-0">
           <button
             onClick={handleToggle}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
-              transition-all duration-200 whitespace-nowrap
+              flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
+              transition-all duration-200 whitespace-nowrap shrink-0
               ${
                 company.sent
                   ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50"
@@ -115,31 +120,34 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             `}
           >
             {company.sent ? (
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-3 h-3 lg:w-4 lg:h-4" />
             ) : (
-              <Circle className="w-4 h-4" />
+              <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            {company.sent ? "Gönderildi" : "Gönderilmedi"}
+            <span className="hidden sm:inline">{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
+          </button>
+
+          <button
+            onClick={handleWhatsApp}
+            className="
+              flex items-center justify-center gap-1 lg:gap-2
+              bg-whatsapp hover:bg-whatsapp-dark
+              text-white font-semibold
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              transition-all duration-200
+              hover:shadow-lg hover:shadow-whatsapp/25
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
+            "
+          >
+            <ExternalLink className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">WhatsApp Aç</span>
+            <span className="sm:hidden">WhatsApp</span>
           </button>
         </div>
-
-        <button
-          onClick={handleWhatsApp}
-          className="
-            flex items-center justify-center gap-2
-            bg-whatsapp hover:bg-whatsapp-dark
-            text-white font-semibold
-            px-6 py-3 rounded-xl
-            transition-all duration-200
-            hover:shadow-lg hover:shadow-whatsapp/25
-            hover:scale-[1.02]
-            active:scale-[0.98]
-            whitespace-nowrap
-          "
-        >
-          <ExternalLink className="w-4 h-4" />
-          WhatsApp Aç
-        </button>
       </div>
     </div>
   );
@@ -167,7 +175,7 @@ export function DataTable({
     );
   }
 
-  const rowHeight = 80;
+  const rowHeight = 72;
   const maxHeight = Math.min(companies.length * rowHeight, 600);
 
   return (
@@ -238,64 +246,69 @@ function CompanyRowComponent({
 
   return (
     <div className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-4 px-6 py-4 items-center">
-        <div className="flex items-center gap-3 min-w-0">
-          <div
-            className={`
-              w-10 h-10 rounded-xl flex items-center justify-center shrink-0
-              ${
-                company.sent
-                  ? "bg-green-100 dark:bg-green-900/30"
-                  : "bg-gray-100 dark:bg-gray-700"
-              }
-            `}
-          >
-            <span className="text-lg">
-              {company.sent ? "✓" : "🏢"}
-            </span>
-          </div>
-          <div className="min-w-0">
-            <p
-              className="font-semibold text-gray-800 dark:text-gray-100 truncate"
-              dir={dir}
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
+          <div className="flex items-center gap-2 lg:gap-3 min-w-0">
+            <div
+              className={`
+                w-8 h-8 lg:w-10 lg:h-10 rounded-xl flex items-center justify-center shrink-0
+                ${
+                  company.sent
+                    ? "bg-green-100 dark:bg-green-900/30"
+                    : "bg-gray-100 dark:bg-gray-700"
+                }
+              `}
             >
-              {company.name}
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 truncate lg:hidden">
-              {formatPhoneForDisplay(company.phone)}
-            </p>
+              <span className="text-sm lg:text-lg">
+                {company.sent ? "✓" : "🏢"}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p
+                className="font-semibold text-sm lg:text-base text-gray-800 dark:text-gray-100 truncate"
+                dir={dir}
+              >
+                {company.name}
+              </p>
+              <div className="flex items-center gap-1.5 lg:hidden mt-0.5">
+                <Phone className="w-3 h-3 text-gray-400 shrink-0" />
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                  {formatPhoneForDisplay(company.phone)}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="hidden lg:flex items-center gap-2">
-          <Phone className="w-4 h-4 text-gray-400 shrink-0" />
-          <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
-            {formatPhoneForDisplay(company.phone)}
-          </span>
-        </div>
-
-        <div className="hidden lg:block min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
-            <span className="text-xs text-gray-400 dark:text-gray-500">
-              Mesaj
+          <div className="hidden lg:flex items-center gap-2">
+            <Phone className="w-4 h-4 text-gray-400 shrink-0" />
+            <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
+              {formatPhoneForDisplay(company.phone)}
             </span>
           </div>
-          <p
-            className="text-sm text-gray-500 dark:text-gray-400 truncate"
-            dir="auto"
-          >
-            {company.message.slice(0, 80)}
-            {company.message.length > 80 ? "..." : ""}
-          </p>
+
+          <div className="hidden lg:block min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
+              <span className="text-xs text-gray-400 dark:text-gray-500">
+                Mesaj
+              </span>
+            </div>
+            <p
+              className="text-sm text-gray-500 dark:text-gray-400 truncate"
+              dir="auto"
+            >
+              {company.message.slice(0, 80)}
+              {company.message.length > 80 ? "..." : ""}
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between lg:justify-start gap-3">
+        <div className="flex items-center gap-2 lg:gap-4 shrink-0">
           <button
             onClick={() => onToggleSent(company.id)}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
-              transition-all duration-200 whitespace-nowrap
+              flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
+              transition-all duration-200 whitespace-nowrap shrink-0
               ${
                 company.sent
                   ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50"
@@ -304,29 +317,32 @@ function CompanyRowComponent({
             `}
           >
             {company.sent ? (
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-3 h-3 lg:w-4 lg:h-4" />
             ) : (
-              <Circle className="w-4 h-4" />
+              <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            {company.sent ? "Gönderildi" : "Gönderilmedi"}
+            <span className="hidden sm:inline">{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
           </button>
 
           <button
             onClick={() => openWhatsApp(company.phone, company.message)}
             className="
-              flex items-center justify-center gap-2
+              flex items-center justify-center gap-1 lg:gap-2
               bg-whatsapp hover:bg-whatsapp-dark
               text-white font-semibold
-              px-6 py-3 rounded-xl
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-whatsapp/25
               hover:scale-[1.02]
               active:scale-[0.98]
               whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
             "
           >
-            <ExternalLink className="w-4 h-4" />
-            WhatsApp Aç
+            <ExternalLink className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">WhatsApp Aç</span>
+            <span className="sm:hidden">WhatsApp</span>
           </button>
         </div>
       </div>

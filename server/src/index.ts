@@ -13,6 +13,6 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: Date.now() });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server http://localhost:${PORT} adresinde çalışıyor`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server http://0.0.0.0:${PORT} adresinde çalışıyor`);
 });
