@@ -47,14 +47,6 @@ export interface ParsedLine {
   rawLine: string;
 }
 
-const LINE_PATTERNS = [
-  /^(.+?)\s*[-–—]\s*([+]?[\d][\d\s\-()]{6,})\s*$/,
-  /^(.+?)\s+([+]?[\d][\d\s\-()]{6,})\s*$/,
-];
-
-function extractDigits(phone: string): string {
-  return phone.replace(/[^\d]/g, "");
-}
 
 const COUNTRY_CODE_MAX_DIGITS: Record<string, number> = {
   "994": 12,
@@ -84,49 +76,79 @@ export function parseLine(line: string): ParsedLine | null {
   const trimmed = line.trim();
   if (!trimmed || trimmed.length < 3) return null;
 
-  for (const pattern of LINE_PATTERNS) {
-    const match = trimmed.match(pattern);
-    if (match) {
-      let name = match[1].trim();
-      const phoneRaw = match[2].trim();
+  // Broad pattern starting with a plus, digit, or opening parenthesis
+  const PHONE_REGEX = /[+(\d][\d\s\-().+]{5,}/g;
 
-      name = reverseArabicText(name);
+  let bestMatch: { phone: string; name: string } | null = null;
+  let match;
+  PHONE_REGEX.lastIndex = 0;
 
-      const digits = extractDigits(phoneRaw);
-      if (digits.length < 7 || digits.length > 15) continue;
+  while ((match = PHONE_REGEX.exec(trimmed)) !== null) {
+    const rawMatch = match[0];
+    
+    // Split by consecutive spaces to avoid grabbing adjacent columns
+    const segments = rawMatch.split(/\s{2,}/);
+    const candidateRaw = segments[0].trim();
 
-      const normalized = normalizePhone(phoneRaw);
-      if (normalized.length < 9) continue;
-
-      const trimmedDigits = trimPhoneDigits(normalized);
-      if (trimmedDigits !== normalized) {
-        const code = Object.keys(COUNTRY_CODE_MAX_DIGITS).find((c) =>
-          normalized.startsWith(c)
-        );
-        if (code) {
-          const localPart = trimmedDigits.slice(code.length);
-          const fixed = normalizePhone(code + localPart);
-          if (fixed.length >= 9) {
-            return {
-              name,
-              phone: fixed,
-              rawLine: trimmed,
-            };
-          }
-        }
-        return {
-          name,
-          phone: trimmedDigits,
-          rawLine: trimmed,
-        };
-      }
-
-      return {
-        name,
-        phone: normalized,
-        rawLine: trimmed,
-      };
+    // Clean phone candidate: if it has '+' in the middle or end, move it to the front
+    let cleanPhone = candidateRaw;
+    if (cleanPhone.includes("+")) {
+      cleanPhone = "+" + cleanPhone.replace(/\+/g, "");
     }
+
+    const digits = cleanPhone.replace(/[^\d]/g, "");
+
+    if (digits.length >= 7 && digits.length <= 15) {
+      const normalized = normalizePhone(cleanPhone);
+      if (normalized.length >= 9) {
+        const phoneIndex = match.index;
+        let namePart = trimmed.substring(0, phoneIndex).trim();
+        
+        // Clean trailing name separators (multiple consecutive separators allowed)
+        namePart = namePart.replace(/[\s-–—,:(]+$/, "").trim();
+
+        // Handle cases where the line number might be at the start of the name, e.g., "39   Trecey's"
+        namePart = namePart.replace(/^\d+\s+/, "").trim();
+
+        if (namePart.length > 0) {
+          namePart = reverseArabicText(namePart);
+          bestMatch = {
+            name: namePart,
+            phone: normalized,
+          };
+          break;
+        }
+      }
+    }
+  }
+
+  if (bestMatch) {
+    const normalized = bestMatch.phone;
+    const trimmedDigits = trimPhoneDigits(normalized);
+    let finalPhone = normalized;
+
+    if (trimmedDigits !== normalized) {
+      const code = Object.keys(COUNTRY_CODE_MAX_DIGITS).find((c) =>
+        normalized.startsWith(c)
+      );
+      if (code) {
+        const localPart = trimmedDigits.slice(code.length);
+        const fixed = normalizePhone(code + localPart);
+        if (fixed.length >= 9) {
+          finalPhone = fixed;
+        } else {
+          finalPhone = trimmedDigits;
+        }
+      } else {
+        finalPhone = trimmedDigits;
+      }
+    }
+
+    return {
+      name: bestMatch.name,
+      phone: finalPhone,
+      rawLine: trimmed,
+    };
   }
 
   return null;
