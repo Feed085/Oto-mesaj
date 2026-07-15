@@ -1,3 +1,15 @@
+const MAX_DIGITS: [string, number][] = [
+  ["994", 12],
+  ["93", 11],
+  ["7", 11],
+  ["90", 11],
+  ["77", 9],
+  ["998", 12],
+  ["996", 12],
+  ["992", 12],
+  ["993", 12],
+];
+
 export function normalizePhone(raw: string): string {
   let digits = raw.replace(/[^\d+]/g, "");
 
@@ -10,17 +22,29 @@ export function normalizePhone(raw: string): string {
   }
 
   if (digits.startsWith("994")) {
-    return digits;
+    return trimToMax(digits);
   }
 
   if (digits.startsWith("0")) {
-    return "994" + digits.slice(1);
+    return trimToMax("994" + digits.slice(1));
   }
 
   if (digits.length === 9) {
-    return "994" + digits;
+    return trimToMax("994" + digits);
   }
 
+  return trimToMax(digits);
+}
+
+function trimToMax(digits: string): string {
+  for (const [code, maxLen] of MAX_DIGITS) {
+    if (digits.startsWith(code) && digits.length > maxLen) {
+      return digits.slice(0, maxLen);
+    }
+  }
+  if (digits.length > 15) {
+    return digits.slice(0, 15);
+  }
   return digits;
 }
 
