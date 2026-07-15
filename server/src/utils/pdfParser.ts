@@ -1,7 +1,10 @@
 import * as pdfjsLib from "pdfjs-dist";
 import { normalizePhone } from "./phoneNormalizer.js";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.mjs",
+  "https://unpkg.com"
+).href;
 
 const ARABIC_CHAR_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
