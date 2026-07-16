@@ -10,10 +10,14 @@ import {
   CheckCircle2,
   Circle,
   Trash2,
+  Instagram,
+  Music,
 } from "lucide-react";
 import type { Company } from "@/types";
 import { formatPhoneForDisplay } from "@/utils/phone";
 import { openWhatsApp } from "@/utils/whatsapp";
+import { openInstagramSearch } from "@/utils/instagram";
+import { openTikTokSearch } from "@/utils/tiktok";
 import { getTextDirection } from "@/utils/arabic";
 
 interface DataTableProps {
@@ -38,6 +42,14 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
     openWhatsApp(company.phone, company.message);
   }, [company.phone, company.message]);
 
+  const handleInstagram = useCallback(() => {
+    openInstagramSearch(company.name);
+  }, [company.name]);
+
+  const handleTikTok = useCallback(() => {
+    openTikTokSearch(company.name);
+  }, [company.name]);
+
   const handleToggle = useCallback(() => {
     onToggleSent(company.id);
   }, [company.id, onToggleSent]);
@@ -49,7 +61,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
       style={style}
       className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150"
     >
-      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center h-full">
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center h-full">
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
           <div className="flex items-center gap-2 lg:gap-3 min-w-0">
             <div
@@ -128,6 +140,48 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
           </button>
 
           <button
+            onClick={handleTikTok}
+            className="
+              flex items-center justify-center gap-1 lg:gap-2
+              bg-black hover:bg-gray-800
+              text-white font-semibold
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              transition-all duration-200
+              hover:shadow-lg hover:shadow-black/25
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
+            "
+          >
+            <Music className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">TikTok Aç</span>
+            <span className="sm:hidden">TikTok</span>
+          </button>
+
+          <button
+            onClick={handleInstagram}
+            className="
+              flex items-center justify-center gap-1 lg:gap-2
+              bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500
+              text-white font-semibold
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              transition-all duration-200
+              hover:shadow-lg hover:shadow-pink-500/25
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
+            "
+          >
+            <Instagram className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">Instagram Aç</span>
+            <span className="sm:hidden">Instagram</span>
+          </button>
+
+          <button
             onClick={handleWhatsApp}
             className="
               flex items-center justify-center gap-1 lg:gap-2
@@ -180,7 +234,7 @@ export function DataTable({
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-fade-in">
-      <div className="hidden lg:grid grid-cols-[2fr_1fr_2fr_auto_auto] gap-4 px-6 py-3 bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+      <div className="hidden lg:grid grid-cols-[7fr_1fr_2fr_auto_auto] gap-4 px-6 py-3 bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
         <span>Şirket</span>
         <span>Telefon</span>
         <span>Mesaj</span>
@@ -246,7 +300,7 @@ function CompanyRowComponent({
 
   return (
     <div className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
-      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[2fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center">
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center">
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
           <div className="flex items-center gap-2 lg:gap-3 min-w-0">
             <div
@@ -322,6 +376,48 @@ function CompanyRowComponent({
               <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
             <span className="hidden sm:inline">{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
+          </button>
+
+          <button
+            onClick={() => openTikTokSearch(company.name)}
+            className="
+              flex items-center justify-center gap-1 lg:gap-2
+              bg-black hover:bg-gray-800
+              text-white font-semibold
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              transition-all duration-200
+              hover:shadow-lg hover:shadow-black/25
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
+            "
+          >
+            <Music className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">TikTok Aç</span>
+            <span className="sm:hidden">TikTok</span>
+          </button>
+
+          <button
+            onClick={() => openInstagramSearch(company.name)}
+            className="
+              flex items-center justify-center gap-1 lg:gap-2
+              bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500
+              text-white font-semibold
+              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              transition-all duration-200
+              hover:shadow-lg hover:shadow-pink-500/25
+              hover:scale-[1.02]
+              active:scale-[0.98]
+              whitespace-nowrap
+              text-xs lg:text-sm
+              shrink-0
+            "
+          >
+            <Instagram className="w-3 h-3 lg:w-4 lg:h-4" />
+            <span className="hidden sm:inline">Instagram Aç</span>
+            <span className="sm:hidden">Instagram</span>
           </button>
 
           <button
