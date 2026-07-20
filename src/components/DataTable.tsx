@@ -19,9 +19,11 @@ import { openWhatsApp } from "@/utils/whatsapp";
 import { openInstagramSearch } from "@/utils/instagram";
 import { openTikTokSearch } from "@/utils/tiktok";
 import { getTextDirection } from "@/utils/arabic";
+import { copyToClipboard } from "@/utils/clipboard";
 
 interface DataTableProps {
   companies: Company[];
+  template: string;
   onToggleSent: (id: string) => void;
   onMarkAllSent: () => void;
   onClearAll: () => void;
@@ -30,25 +32,31 @@ interface DataTableProps {
 interface CompanyRowProps extends ListChildComponentProps {
   data: {
     companies: Company[];
+    template: string;
     onToggleSent: (id: string) => void;
   };
 }
 
 const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
   const company = data.companies[index];
+  const template = data.template;
   const onToggleSent = data.onToggleSent;
 
   const handleWhatsApp = useCallback(() => {
     openWhatsApp(company.phone, company.message);
   }, [company.phone, company.message]);
 
-  const handleInstagram = useCallback(() => {
+  const handleInstagram = useCallback(async () => {
+    const message = template.replace(/\{ad\}/g, company.name);
+    await copyToClipboard(message);
     openInstagramSearch(company.name);
-  }, [company.name]);
+  }, [company.name, template]);
 
-  const handleTikTok = useCallback(() => {
+  const handleTikTok = useCallback(async () => {
+    const message = template.replace(/\{ad\}/g, company.name);
+    await copyToClipboard(message);
     openTikTokSearch(company.name);
-  }, [company.name]);
+  }, [company.name, template]);
 
   const handleToggle = useCallback(() => {
     onToggleSent(company.id);
@@ -211,6 +219,7 @@ CompanyRow.displayName = "CompanyRow";
 
 export function DataTable({
   companies,
+  template,
   onToggleSent,
   onMarkAllSent,
   onClearAll,
@@ -248,6 +257,7 @@ export function DataTable({
             <CompanyRowComponent
               key={company.id}
               company={company}
+              template={template}
               onToggleSent={onToggleSent}
             />
           ))}
@@ -258,7 +268,7 @@ export function DataTable({
           itemCount={companies.length}
           itemSize={rowHeight}
           width="100%"
-          itemData={{ companies, onToggleSent }}
+          itemData={{ companies, template, onToggleSent }}
         >
           {CompanyRow}
         </List>
@@ -291,9 +301,11 @@ export function DataTable({
 
 function CompanyRowComponent({
   company,
+  template,
   onToggleSent,
 }: {
   company: Company;
+  template: string;
   onToggleSent: (id: string) => void;
 }) {
   const dir = getTextDirection(company.name);
@@ -379,7 +391,11 @@ function CompanyRowComponent({
           </button>
 
           <button
-            onClick={() => openTikTokSearch(company.name)}
+            onClick={async () => {
+              const message = template.replace(/\{ad\}/g, company.name);
+              await copyToClipboard(message);
+              openTikTokSearch(company.name);
+            }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-black hover:bg-gray-800
@@ -400,7 +416,11 @@ function CompanyRowComponent({
           </button>
 
           <button
-            onClick={() => openInstagramSearch(company.name)}
+            onClick={async () => {
+              const message = template.replace(/\{ad\}/g, company.name);
+              await copyToClipboard(message);
+              openInstagramSearch(company.name);
+            }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500

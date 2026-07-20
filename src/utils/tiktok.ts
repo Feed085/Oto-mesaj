@@ -1,5 +1,5 @@
 export function buildTikTokSearchUrl(companyName: string): string {
-  const query = `site:tiktok.com "${companyName}"`;
+  const query = `${companyName} tiktok`;
   const encodedQuery = encodeURIComponent(query);
   return `https://www.google.com/search?q=${encodedQuery}`;
 }

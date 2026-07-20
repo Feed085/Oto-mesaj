@@ -81,6 +81,7 @@ export default function App() {
 
             <DataTable
               companies={companies}
+              template={template}
               onToggleSent={toggleSent}
               onMarkAllSent={markAllSent}
               onClearAll={clearAll}

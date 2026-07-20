@@ -1,5 +1,5 @@
 export function buildInstagramSearchUrl(companyName: string): string {
-  const query = `site:instagram.com "${companyName}"`;
+  const query = `${companyName} instagram`;
   const encodedQuery = encodeURIComponent(query);
   return `https://www.google.com/search?q=${encodedQuery}`;
 }
