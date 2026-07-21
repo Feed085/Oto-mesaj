@@ -2,17 +2,19 @@ import { useCallback, useState } from "react";
 import { Upload, FileText, AlertCircle, CheckCircle } from "lucide-react";
 
 interface FileUploadProps {
-  onUpload: (file: File) => Promise<{
+  onUpload: (file: File, processId: string) => Promise<{
     totalPages: number;
     totalLines: number;
     parsedLines: number;
     errors: string[];
     newCount: number;
   } | void>;
+  processId: string;
+  processName?: string;
   isLoading: boolean;
 }
 
-export function FileUpload({ onUpload, isLoading }: FileUploadProps) {
+export function FileUpload({ onUpload, processId, processName, isLoading }: FileUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadResult, setUploadResult] = useState<{
     message: string;
@@ -40,7 +42,7 @@ export function FileUpload({ onUpload, isLoading }: FileUploadProps) {
 
       try {
         setUploadResult(null);
-        const result = await onUpload(file);
+        const result = await onUpload(file, processId);
         if (result) {
           setUploadResult({
             message: `${result.newCount} şirket bulundu (${result.totalPages} sayfa, ${result.parsedLines} satır ayrıştırıldı)`,
@@ -54,7 +56,7 @@ export function FileUpload({ onUpload, isLoading }: FileUploadProps) {
         setUploadResult({ message, type: "error" });
       }
     },
-    [onUpload]
+    [onUpload, processId]
   );
 
   const handleDrop = useCallback(
@@ -87,6 +89,15 @@ export function FileUpload({ onUpload, isLoading }: FileUploadProps) {
 
   return (
     <div className="animate-fade-in">
+      <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+        <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+          {processName || "Aktif İşlem"}
+        </p>
+        <p className="text-xs text-blue-600 dark:text-blue-400">
+          PDF yükleme için hazır
+        </p>
+      </div>
+
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
