@@ -1,54 +1,40 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer";
-import { extractTextFromPDF, parseTextToCompanies } from "../server/src/utils/pdfParser.js";
-import { normalizePhone } from "../server/src/utils/phoneNormalizer.js";
+import pdfRoutes from "../server/src/routes/pdf.js";
+import processRoutes from "../server/src/routes/processes.js";
+import authRoutes from "../server/src/routes/auth.js";
+import companiesRoutes from "../server/src/routes/companies.js";
+import { initDb } from "../server/src/db.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 },
-});
+// Lazy database initialization middleware for Serverless context
+let dbInitialized = false;
+const ensureDbInit = async (req: any, res: any, next: any) => {
+  if (!dbInitialized) {
+    try {
+      await initDb();
+      dbInitialized = true;
+    } catch (err) {
+      console.error("Database initialization failed:", err);
+    }
+  }
+  next();
+};
+
+app.use(ensureDbInit);
+
+// Mount API routes
+app.use("/api", pdfRoutes);
+app.use("/api/processes", processRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/companies", companiesRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: Date.now() });
-});
-
-app.post("/api/parse-pdf", upload.single("pdf"), async (req, res) => {
-  try {
-    if (!req.file) {
-      res.status(400).json({ success: false, error: "PDF dosyası yüklenmedi." });
-      return;
-    }
-
-    const { text, totalPages } = await extractTextFromPDF(req.file.buffer);
-    const result = parseTextToCompanies(text, totalPages);
-
-    const companies = result.companies.map((c, index) => ({
-      id: `company-${Date.now()}-${index}`,
-      name: c.name,
-      phone: normalizePhone(c.phone),
-      rawPhone: c.rawLine,
-    }));
-
-    res.json({
-      success: true,
-      data: {
-        companies,
-        totalPages: result.totalPages,
-        totalLines: result.totalLines,
-        parsedLines: result.parsedLines,
-        errors: result.errors,
-      },
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Bilinmeyen bir hata oluştu.";
-    res.status(500).json({ success: false, error: `PDF işlenirken hata: ${message}` });
-  }
 });
 
 export default app;

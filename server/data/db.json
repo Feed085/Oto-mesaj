@@ -34,7 +34,7 @@
       "phone": "994212693949",
       "rawPhone": "• Kültür Kurs Merkezi: (0212) 693 94 94",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -45,7 +45,7 @@
       "phone": "90212450138",
       "rawPhone": "• MED Fen Bilimleri İstanbul - Esenyurt Kurs Merkezi: +90 212 450 13 81",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -56,7 +56,7 @@
       "phone": "90543447445",
       "rawPhone": "• Esenyurt Sekiz Oniki Kurs Merkezi: +90 543 447 44 51",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -67,7 +67,7 @@
       "phone": "90546620120",
       "rawPhone": "• Esenyurt Olimpiyat Akademi Kurs Merkezi: +90 546 620 12 07",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
