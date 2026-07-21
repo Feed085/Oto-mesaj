@@ -69,7 +69,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
       style={style}
       className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150"
     >
-      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center h-full">
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center h-full">
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
           <div className="flex items-center gap-2 lg:gap-3 min-w-0">
             <div
@@ -107,22 +107,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
               {formatPhoneForDisplay(company.phone)}
             </span>
-          </div>
-
-          <div className="hidden lg:block min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
-              <span className="text-xs text-gray-400 dark:text-gray-500">
-                Mesaj
-              </span>
-            </div>
-            <p
-              className="text-sm text-gray-500 dark:text-gray-400 truncate"
-              dir="auto"
-            >
-              {company.message.slice(0, 80)}
-              {company.message.length > 80 ? "..." : ""}
-            </p>
           </div>
         </div>
 
@@ -243,10 +227,9 @@ export function DataTable({
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-fade-in">
-      <div className="hidden lg:grid grid-cols-[7fr_1fr_2fr_auto_auto] gap-4 px-6 py-3 bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+      <div className="hidden lg:grid grid-cols-[7fr_1fr_auto_auto] gap-4 px-6 py-3 bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
         <span>Şirket</span>
         <span>Telefon</span>
-        <span>Mesaj</span>
         <span>Durum</span>
         <span>İşlem</span>
       </div>
@@ -312,7 +295,7 @@ function CompanyRowComponent({
 
   return (
     <div className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
-      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_2fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center">
+      <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[7fr_1fr_auto_auto] gap-3 lg:gap-4 px-4 lg:px-6 py-3 lg:py-4 items-center">
         <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3 min-w-0">
           <div className="flex items-center gap-2 lg:gap-3 min-w-0">
             <div
@@ -350,22 +333,6 @@ function CompanyRowComponent({
             <span className="text-sm font-mono text-gray-600 dark:text-gray-300">
               {formatPhoneForDisplay(company.phone)}
             </span>
-          </div>
-
-          <div className="hidden lg:block min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <MessageSquare className="w-3 h-3 text-gray-400 shrink-0" />
-              <span className="text-xs text-gray-400 dark:text-gray-500">
-                Mesaj
-              </span>
-            </div>
-            <p
-              className="text-sm text-gray-500 dark:text-gray-400 truncate"
-              dir="auto"
-            >
-              {company.message.slice(0, 80)}
-              {company.message.length > 80 ? "..." : ""}
-            </p>
           </div>
         </div>
 
