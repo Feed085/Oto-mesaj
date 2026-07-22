@@ -6,7 +6,14 @@ import { generateMessage } from "@/utils/message";
 export function useCompanies() {
   const { token } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [template, setTemplate] = useState("Merhaba {ad},\n\nSize nasıl yardımcı olabiliriz?");
+  const [template, setTemplate] = useState(() => {
+    const saved = localStorage.getItem("message_template");
+    return saved !== null ? saved : "Merhaba, {ad} , sayfanızı gördüm. Bir sorum olacak: öğrencilerinizin sınav/deneme sonuçlarını şu an nasıl takip ediyorsunuz, elle mi yoksa bir sistemle mi?";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("message_template", template);
+  }, [template]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
