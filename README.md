@@ -15,8 +15,8 @@ npm run dev
 
 Vercel'de deploy etmek için şu environment variable'ları ekleyin:
 
-- `POSTGRES_URL` veya `DATABASE_URL`: Vercel Postgres connection string
-  - Vercel dashboard'da Storage > Postgres sekmesinden oluşturabilirsiniz
+- `BLOB_READ_WRITE_TOKEN`: Vercel Blob Storage token
+  - Vercel dashboard'da Storage > Blob sekmesinden oluşturabilirsiniz
   - Ücretsiz tier mevcuttur
 
 ### Deployment
@@ -29,6 +29,6 @@ vercel
 ## Database
 
 - **Local Development**: lowdb (JSON file storage)
-- **Vercel Production**: PostgreSQL (Vercel Postgres)
+- **Vercel Production**: Vercel Blob Storage (kalıcı JSON storage)
 
-Sistem otomatik olarak environment variable'lara göre doğru database'i seçer.
+Sistem otomatik olarak environment variable'lara göre doğru storage'ı kullanır.
