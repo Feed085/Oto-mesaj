@@ -25,6 +25,21 @@ export function normalizePhone(raw: string): string {
     return trimToMax(digits);
   }
 
+  if (digits.startsWith("90")) {
+    return trimToMax(digits);
+  }
+
+  // Turkish local numbers: 0 + 10 digits = 11 total
+  if (digits.startsWith("0") && digits.length === 11) {
+    return trimToMax("90" + digits.slice(1));
+  }
+
+  // Azerbaijani local numbers: 0 + 9 digits = 10 total
+  if (digits.startsWith("0") && digits.length === 10) {
+    return trimToMax("994" + digits.slice(1));
+  }
+
+  // Fallback for other 0-prefixed numbers
   if (digits.startsWith("0")) {
     return trimToMax("994" + digits.slice(1));
   }
@@ -57,5 +72,6 @@ export function formatPhoneForDisplay(phone: string): string {
 }
 
 export function formatPhoneForWhatsApp(phone: string): string {
-  return normalizePhone(phone);
+  const normalized = normalizePhone(phone);
+  return "+" + normalized;
 }

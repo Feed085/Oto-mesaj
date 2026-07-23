@@ -288,19 +288,39 @@ export function useCompanies() {
   }, [filteredCompanies, token]);
 
   const clearAll = useCallback(async () => {
-    if (!activeProcessId) return;
+    if (!activeProcessId) {
+      setError("Lütfen önce bir işlem seçin.");
+      return;
+    }
 
     try {
-      await fetch(`/api/companies/process/${activeProcessId}`, {
+      const response = await fetch(`/api/companies/process/${activeProcessId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setCompanies((prev) => prev.filter((c) => c.processId !== activeProcessId));
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Şirketler silinirken hata oluştu.");
+      }
+
+      // Refresh companies from server
+      const companiesRes = await fetch("/api/companies", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const companiesData = await companiesRes.json();
+      if (companiesData.success) {
+        setCompanies(companiesData.data);
+      }
     } catch (err) {
-      console.error("Failed to clear companies:", err);
+      const message =
+        err instanceof Error ? err.message : "Bilinmeyen hata oluştu.";
+      setError(message);
     }
   }, [activeProcessId, token]);
 

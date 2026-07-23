@@ -44,22 +44,28 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
 
   const handleWhatsApp = useCallback(() => {
     openWhatsApp(company.phone, company.message);
-    onToggleSent(company.id);
-  }, [company.phone, company.message, company.id, onToggleSent]);
+    if (!company.sent) {
+      onToggleSent(company.id);
+    }
+  }, [company.phone, company.message, company.id, company.sent, onToggleSent]);
 
   const handleInstagram = useCallback(async () => {
     const message = template.replace(/\{ad\}/g, company.name);
     await copyToClipboard(message);
     openInstagramSearch(company.name);
-    onToggleSent(company.id);
-  }, [company.name, template, company.id, onToggleSent]);
+    if (!company.sent) {
+      onToggleSent(company.id);
+    }
+  }, [company.name, template, company.id, company.sent, onToggleSent]);
 
   const handleTikTok = useCallback(async () => {
     const message = template.replace(/\{ad\}/g, company.name);
     await copyToClipboard(message);
     openTikTokSearch(company.name);
-    onToggleSent(company.id);
-  }, [company.name, template, company.id, onToggleSent]);
+    if (!company.sent) {
+      onToggleSent(company.id);
+    }
+  }, [company.name, template, company.id, company.sent, onToggleSent]);
 
   const handleToggle = useCallback(() => {
     onToggleSent(company.id);
@@ -111,7 +117,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
           <button
             onClick={handleToggle}
             className={`
-              flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
+              flex items-center justify-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
               transition-all duration-200 whitespace-nowrap shrink-0
               ${
                 company.sent
@@ -125,7 +131,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             ) : (
               <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            <span>{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
           </button>
 
           <button
@@ -134,7 +139,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
               flex items-center justify-center gap-1 lg:gap-2
               bg-black hover:bg-gray-800
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-black/25
               hover:scale-[1.02]
@@ -145,8 +150,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             "
           >
             <Music className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">TikTok Aç</span>
-            <span className="sm:hidden">TikTok</span>
           </button>
 
           <button
@@ -155,7 +158,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
               flex items-center justify-center gap-1 lg:gap-2
               bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-pink-500/25
               hover:scale-[1.02]
@@ -166,8 +169,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             "
           >
             <Instagram className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">Instagram Aç</span>
-            <span className="sm:hidden">Instagram</span>
           </button>
 
           <button
@@ -176,7 +177,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
               flex items-center justify-center gap-1 lg:gap-2
               bg-whatsapp hover:bg-whatsapp-dark
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-whatsapp/25
               hover:scale-[1.02]
@@ -187,8 +188,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             "
           >
             <ExternalLink className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">WhatsApp Aç</span>
-            <span className="sm:hidden">WhatsApp</span>
           </button>
         </div>
       </div>
@@ -331,7 +330,7 @@ function CompanyRowComponent({
           <button
             onClick={() => onToggleSent(company.id)}
             className={`
-              flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
+              flex items-center justify-center gap-1 lg:gap-2 px-2 lg:px-4 py-1.5 lg:py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium
               transition-all duration-200 whitespace-nowrap shrink-0
               ${
                 company.sent
@@ -345,7 +344,6 @@ function CompanyRowComponent({
             ) : (
               <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            <span>{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
           </button>
 
           <button
@@ -353,13 +351,15 @@ function CompanyRowComponent({
               const message = template.replace(/\{ad\}/g, company.name);
               await copyToClipboard(message);
               openTikTokSearch(company.name);
-              onToggleSent(company.id);
+              if (!company.sent) {
+                onToggleSent(company.id);
+              }
             }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-black hover:bg-gray-800
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-black/25
               hover:scale-[1.02]
@@ -370,8 +370,6 @@ function CompanyRowComponent({
             "
           >
             <Music className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">TikTok Aç</span>
-            <span className="sm:hidden">TikTok</span>
           </button>
 
           <button
@@ -379,13 +377,15 @@ function CompanyRowComponent({
               const message = template.replace(/\{ad\}/g, company.name);
               await copyToClipboard(message);
               openInstagramSearch(company.name);
-              onToggleSent(company.id);
+              if (!company.sent) {
+                onToggleSent(company.id);
+              }
             }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:from-purple-600 hover:via-pink-600 hover:to-orange-500
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-pink-500/25
               hover:scale-[1.02]
@@ -396,20 +396,20 @@ function CompanyRowComponent({
             "
           >
             <Instagram className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">Instagram Aç</span>
-            <span className="sm:hidden">Instagram</span>
           </button>
 
           <button
             onClick={() => {
               openWhatsApp(company.phone, company.message);
-              onToggleSent(company.id);
+              if (!company.sent) {
+                onToggleSent(company.id);
+              }
             }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-whatsapp hover:bg-whatsapp-dark
               text-white font-semibold
-              px-2 lg:px-6 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
+              px-2 lg:px-4 py-1.5 lg:py-3 rounded-lg lg:rounded-xl
               transition-all duration-200
               hover:shadow-lg hover:shadow-whatsapp/25
               hover:scale-[1.02]
@@ -420,8 +420,6 @@ function CompanyRowComponent({
             "
           >
             <ExternalLink className="w-3 h-3 lg:w-4 lg:h-4" />
-            <span className="hidden sm:inline">WhatsApp Aç</span>
-            <span className="sm:hidden">WhatsApp</span>
           </button>
         </div>
       </div>

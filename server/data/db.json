@@ -23,7 +23,7 @@
       "phone": "994216291212",
       "rawPhone": "• Ataşehir Elit Fen Bilimleri Kurs Merkezi: (0216) 291 21 21",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -34,7 +34,7 @@
       "phone": "994212693949",
       "rawPhone": "• Kültür Kurs Merkezi: (0212) 693 94 94",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -45,7 +45,7 @@
       "phone": "90212450138",
       "rawPhone": "• MED Fen Bilimleri İstanbul - Esenyurt Kurs Merkezi: +90 212 450 13 81",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -78,7 +78,7 @@
       "phone": "90212620559",
       "rawPhone": "• Esenyurt Limit Kurs: +90 212 620 55 99",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -144,7 +144,7 @@
       "phone": "90212699992",
       "rawPhone": "• Kültür Kurs Merkezi (Esenyurt): +90 212 699 99 20",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -210,7 +210,7 @@
       "phone": "90543384073",
       "rawPhone": "• Vip Fen Bilimleri Özel Öğretim Kursu: +90 543 384 07 39",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -276,7 +276,7 @@
       "phone": "90531847744",
       "rawPhone": "• Başarı Vip Eğitim Kurumu: +90 531 847 74 45",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -342,7 +342,7 @@
       "phone": "90212699643",
       "rawPhone": "• Esenyurt Belediyesi Sürekli Eğitim Merkezi: +90 212 699 64 36",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -408,7 +408,7 @@
       "phone": "90530864788",
       "rawPhone": "• Matematik Özel Ders Kurs Dershane: +90 530 864 78 89",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -474,7 +474,7 @@
       "phone": "90212852341",
       "rawPhone": "• Fen Bilimleri Okulları: +90 212 852 34 10",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -540,7 +540,7 @@
       "phone": "90544773423",
       "rawPhone": "• OKAN BUTİK EĞİTİM (ESENKENT): +90 544 773 42 31",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -606,7 +606,7 @@
       "phone": "90212426238",
       "rawPhone": "• Yeni Rehber İlke Özel Eğitim ve Rehabilitasyon Merkezi: +90 212 426 23 81",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -672,7 +672,7 @@
       "phone": "90551504166",
       "rawPhone": "• Taşkın Özel Güvenlik Eğitim Kurumu: +90 551 504 16 61",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -738,7 +738,7 @@
       "phone": "90212580130",
       "rawPhone": "• Küçükçekmece Açıköğretim Ortaokul ve Lisesi Bürosu: +90 212 580 13 00",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -804,7 +804,7 @@
       "phone": "90212890599",
       "rawPhone": "• Cemil Mutlu Ortaokulu: +90 212 890 59 95",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -870,7 +870,7 @@
       "phone": "90555960354",
       "rawPhone": "Merkezi: +90 555 960 35 40",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -936,7 +936,7 @@
       "phone": "90549665509",
       "rawPhone": "• Küçükçekmece Canbey Src Üdy Ody Kursu: +90 549 665 50 99",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1002,7 +1002,7 @@
       "phone": "90212545335",
       "rawPhone": "• Park Kişisel Gelişim Kursu: +90 212 545 33 55",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1068,7 +1068,7 @@
       "phone": "90212698349",
       "rawPhone": "• Alaeddin Yavaşca Güzel Sanatlar Lisesi: +90 212 698 34 93",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1079,7 +1079,7 @@
       "phone": "90212540820",
       "rawPhone": "ANADOLU LİSESİ: +90 212 540 82 00",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1134,7 +1134,7 @@
       "phone": "90212411082",
       "rawPhone": "• Küçükçekmece İyilik Merkezi: +90 212 411 08 26",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1200,7 +1200,7 @@
       "phone": "90542365933",
       "rawPhone": "• Pena Müzik Merkezi: +90 542 365 93 34",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1266,7 +1266,7 @@
       "phone": "90551213754",
       "rawPhone": "• Küçükçekmece Alfa Anaokulu: +90 551 213 75 43",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1288,7 +1288,7 @@
       "phone": "90212488000",
       "rawPhone": "• Harikalar Diyarı Baby akademi şubesi: +90 212 488 00 06",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1332,7 +1332,7 @@
       "phone": "994212886884",
       "rawPhone": "• ALKEV Özel Okulları: (0212) 886 88 40",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1354,7 +1354,7 @@
       "phone": "90212599116",
       "rawPhone": "• Küçükçekmece Boks ve Kick Boks Spor Kulübü: +90 212 599 11 61",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1398,7 +1398,7 @@
       "phone": "90212548317",
       "rawPhone": "• Göktürk İlkokulu: +90 212 548 31 73",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1420,7 +1420,7 @@
       "phone": "90212580232",
       "rawPhone": "• Özel Gonca Sürücü Kursu: +90 212 580 23 23",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1464,7 +1464,7 @@
       "phone": "90212470002",
       "rawPhone": "• CMA Orman Anaokulu: +90 212 470 00 28",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1486,7 +1486,7 @@
       "phone": "90212461060",
       "rawPhone": "• İSTANBUL - BAĞCILAR HALK EĞİTİMİ MERKEZİ: +90 212 461 06 00",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1530,7 +1530,7 @@
       "phone": "90212433125",
       "rawPhone": "• Bağcılar Sınav Kurs: +90 212 433 12 54",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1552,7 +1552,7 @@
       "phone": "90506756722",
       "rawPhone": "• Atabey Bağcılar Kurs Merkezi: +90 506 756 72 23",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1596,7 +1596,7 @@
       "phone": "90212433061",
       "rawPhone": "• Kültür Kurs Merkezi / Bağcılar: +90 212 433 06 17",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1618,7 +1618,7 @@
       "phone": "90212644010",
       "rawPhone": "• Bağcılar Final Kurs: +90 212 644 01 01",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1662,7 +1662,7 @@
       "phone": "9021243422",
       "rawPhone": "• Enstitü İstanbul İSMEK, Bağcılar Fevziçakmak Eğitim Merkezi: +90 212 434 22",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1684,7 +1684,7 @@
       "phone": "9021246292",
       "rawPhone": "• Enstitü İstanbul İSMEK, Bağcılar Yavuzselim Eğitim Merkezi: +90 212 462 92",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1728,7 +1728,7 @@
       "phone": "90212489340",
       "rawPhone": "• Has Güvenlik Eğitim Kurumu: +90 212 489 34 07",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1750,7 +1750,7 @@
       "phone": "90212434386",
       "rawPhone": "• Bağcılar Yargı Akademi: +90 212 434 38 68",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1794,7 +1794,7 @@
       "phone": "90530920807",
       "rawPhone": "• VARAN ÖZEL ÖĞRETİM KURSU: +90 530 920 80 72",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1816,7 +1816,7 @@
       "phone": "90212630687",
       "rawPhone": "• Enstitü İstanbul İSMEK, Bağcılar Kirazlı Eğitim Merkezi: +90 212 630 68 76",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1860,7 +1860,7 @@
       "phone": "90212657751",
       "rawPhone": "• Enstitü İstanbul İSMEK, Bağcılar Barbaros Eğitim Merkezi: +90 212 657 75 11",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1882,7 +1882,7 @@
       "phone": "90212830320",
       "rawPhone": "• Haypader özel eğitim uygulama okulu: +90 212 830 32 06",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1926,7 +1926,7 @@
       "phone": "90212651570",
       "rawPhone": "• Güneşli Nazmi Arıkan Fen Bilimleri Özel Öğretim Kursu: +90 212 651 57 00",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1948,7 +1948,7 @@
       "phone": "90212435743",
       "rawPhone": "• Point Güvenlik Eğitimi: +90 212 435 74 35",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -1992,7 +1992,7 @@
       "phone": "90212507027",
       "rawPhone": "• Taşer SRC Kursu: +90 212 507 02 78",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2014,7 +2014,7 @@
       "phone": "90212434762",
       "rawPhone": "• Bağcılar Gençlik Merkezi: +90 212 434 76 20",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2058,7 +2058,7 @@
       "phone": "90212462150",
       "rawPhone": "• bağcılar özel eğitim merkezi yavuzselim: +90 212 462 15 08",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2080,7 +2080,7 @@
       "phone": "90533329347",
       "rawPhone": "• Özel Akademi İstanbul: +90 533 329 34 76",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2124,7 +2124,7 @@
       "phone": "90212544050",
       "rawPhone": "• İlkadro Özel Güvenlik: +90 212 544 05 05",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2146,7 +2146,7 @@
       "phone": "90212449961",
       "rawPhone": "• Bağcılar ÖZGEM: +90 212 449 96 12",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2168,7 +2168,7 @@
       "phone": "90212515060",
       "rawPhone": "• Önder Bilgisayar Kursu: +90 212 515 06 05",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2190,7 +2190,7 @@
       "phone": "90212630161",
       "rawPhone": "• Bağcılar Belediyesi Engelliler Sarayı: +90 212 630 16 16",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2388,7 +2388,7 @@
       "phone": "90212657174",
       "rawPhone": "• Özel Akademik Gelişim Sürücü Kursları: +90 212 657 17 47",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2399,7 +2399,7 @@
       "phone": "90212434104",
       "rawPhone": "• Bağcılar KEY Koleji: +90 212 434 10 44",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2443,7 +2443,7 @@
       "phone": "90212445747",
       "rawPhone": "• Bağcılar Fatih Kız Mesleki ve Teknik Anadolu Lisesi: +90 212 445 74 72",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -2454,7 +2454,7 @@
       "phone": "90212436010",
       "rawPhone": "• Bağcılar Orhan Gazi Anadolu İmam Hatip Lisesi: +90 212 436 01 09",
       "message": "",
-      "sent": false,
+      "sent": true,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
