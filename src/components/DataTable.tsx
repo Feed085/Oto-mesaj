@@ -44,19 +44,22 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
 
   const handleWhatsApp = useCallback(() => {
     openWhatsApp(company.phone, company.message);
-  }, [company.phone, company.message]);
+    onToggleSent(company.id);
+  }, [company.phone, company.message, company.id, onToggleSent]);
 
   const handleInstagram = useCallback(async () => {
     const message = template.replace(/\{ad\}/g, company.name);
     await copyToClipboard(message);
     openInstagramSearch(company.name);
-  }, [company.name, template]);
+    onToggleSent(company.id);
+  }, [company.name, template, company.id, onToggleSent]);
 
   const handleTikTok = useCallback(async () => {
     const message = template.replace(/\{ad\}/g, company.name);
     await copyToClipboard(message);
     openTikTokSearch(company.name);
-  }, [company.name, template]);
+    onToggleSent(company.id);
+  }, [company.name, template, company.id, onToggleSent]);
 
   const handleToggle = useCallback(() => {
     onToggleSent(company.id);
@@ -93,12 +96,6 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
               >
                 {company.name}
               </p>
-              <div className="flex items-center gap-1.5 lg:hidden mt-0.5">
-                <Phone className="w-3 h-3 text-gray-400 shrink-0" />
-                <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                  {formatPhoneForDisplay(company.phone)}
-                </p>
-              </div>
             </div>
           </div>
 
@@ -128,7 +125,7 @@ const CompanyRow = memo(({ index, style, data }: CompanyRowProps) => {
             ) : (
               <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            <span className="hidden sm:inline">{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
+            <span>{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
           </button>
 
           <button
@@ -319,12 +316,6 @@ function CompanyRowComponent({
               >
                 {company.name}
               </p>
-              <div className="flex items-center gap-1.5 lg:hidden mt-0.5">
-                <Phone className="w-3 h-3 text-gray-400 shrink-0" />
-                <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                  {formatPhoneForDisplay(company.phone)}
-                </p>
-              </div>
             </div>
           </div>
 
@@ -354,7 +345,7 @@ function CompanyRowComponent({
             ) : (
               <Circle className="w-3 h-3 lg:w-4 lg:h-4" />
             )}
-            <span className="hidden sm:inline">{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
+            <span>{company.sent ? "Gönderildi" : "Gönderilmedi"}</span>
           </button>
 
           <button
@@ -362,6 +353,7 @@ function CompanyRowComponent({
               const message = template.replace(/\{ad\}/g, company.name);
               await copyToClipboard(message);
               openTikTokSearch(company.name);
+              onToggleSent(company.id);
             }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
@@ -387,6 +379,7 @@ function CompanyRowComponent({
               const message = template.replace(/\{ad\}/g, company.name);
               await copyToClipboard(message);
               openInstagramSearch(company.name);
+              onToggleSent(company.id);
             }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
@@ -408,7 +401,10 @@ function CompanyRowComponent({
           </button>
 
           <button
-            onClick={() => openWhatsApp(company.phone, company.message)}
+            onClick={() => {
+              openWhatsApp(company.phone, company.message);
+              onToggleSent(company.id);
+            }}
             className="
               flex items-center justify-center gap-1 lg:gap-2
               bg-whatsapp hover:bg-whatsapp-dark
