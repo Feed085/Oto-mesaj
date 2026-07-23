@@ -1,6 +1,11 @@
 import { Router } from "express";
-import { db } from "../db.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.js";
+
+// Use PostgreSQL for Vercel, lowdb for local development
+const dbModule = process.env.POSTGRES_URL || process.env.DATABASE_URL
+  ? await import("../db-postgres.js")
+  : await import("../db.js");
+const { db } = dbModule;
 
 const router = Router();
 

@@ -4,9 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const dbFile = process.env.VERCEL 
-  ? join('/tmp', 'db.json') 
-  : join(__dirname, '../data/db.json');
+const dbFile = join(__dirname, '../data/db.json');
 
 interface Data {
   users: Array<{
@@ -53,3 +51,4 @@ export async function initDb() {
 }
 
 export { db };
+

@@ -4,7 +4,12 @@ import pdfRoutes from "../server/src/routes/pdf.js";
 import processRoutes from "../server/src/routes/processes.js";
 import authRoutes from "../server/src/routes/auth.js";
 import companiesRoutes from "../server/src/routes/companies.js";
-import { initDb } from "../server/src/db.js";
+
+// Use PostgreSQL for Vercel, lowdb for local development
+const dbModule = process.env.POSTGRES_URL || process.env.DATABASE_URL
+  ? await import("../server/src/db-postgres.js")
+  : await import("../server/src/db.js");
+const { initDb } = dbModule;
 
 const app = express();
 

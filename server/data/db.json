@@ -540,7 +540,7 @@
       "phone": "90544773423",
       "rawPhone": "• OKAN BUTİK EĞİTİM (ESENKENT): +90 544 773 42 31",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
@@ -738,7 +738,7 @@
       "phone": "90212580130",
       "rawPhone": "• Küçükçekmece Açıköğretim Ortaokul ve Lisesi Bürosu: +90 212 580 13 00",
       "message": "",
-      "sent": true,
+      "sent": false,
       "createdAt": 1784648439756,
       "processId": "process-1784648435488",
       "userId": "user-1784648389650"
