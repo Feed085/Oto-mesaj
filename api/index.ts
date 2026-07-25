@@ -1,15 +1,22 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import pdfRoutes from "../server/src/routes/pdf.js";
 import processRoutes from "../server/src/routes/processes.js";
 import authRoutes from "../server/src/routes/auth.js";
 import companiesRoutes from "../server/src/routes/companies.js";
 import { initDb } from "../server/src/db.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Serve uploaded PDFs statically (fallback / development compatibility)
+app.use("/api/uploads", express.static(path.join(__dirname, "../server/uploads")));
 
 // Lazy database initialization middleware for Serverless context
 let dbInitialized = false;
