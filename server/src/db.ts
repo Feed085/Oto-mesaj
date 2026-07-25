@@ -4,7 +4,23 @@ if (!process.env.DATABASE_URL) {
   console.warn("WARNING: DATABASE_URL environment variable is not defined!");
 }
 
-const sql = neon(process.env.DATABASE_URL || "");
+let sqlInstance: any = null;
+
+function getSql() {
+  if (!sqlInstance) {
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+      throw new Error("DATABASE_URL environment variable is not set. Please configure it in your Vercel project environment variables.");
+    }
+    sqlInstance = neon(dbUrl);
+  }
+  return sqlInstance;
+}
+
+// Wrapper to support tagged template literal queries lazily
+const sql = (strings: TemplateStringsArray, ...values: any[]) => {
+  return getSql()(strings, ...values);
+};
 
 export async function initDb() {
   if (!process.env.DATABASE_URL) {
@@ -58,3 +74,4 @@ export async function initDb() {
 }
 
 export { sql };
+
