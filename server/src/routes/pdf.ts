@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import { extractTextFromPDF, parseTextToCompanies } from "../utils/pdfParser.js";
 import { normalizePhone } from "../utils/phoneNormalizer.js";
-import { db } from "../db.js";
+import { sql } from "../db.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.js";
 import { put } from "@vercel/blob";
 
@@ -41,11 +41,12 @@ router.post("/parse-pdf", authenticate, upload.single("pdf"), async (req: AuthRe
       return;
     }
 
-    await db.read();
-
     // Verify process belongs to user
-    const processIndex = db.data?.processes.findIndex(p => p.id === processId && p.userId === req.userId);
-    if (processIndex === undefined || processIndex === -1) {
+    const processResult = await sql`
+      SELECT id FROM processes WHERE id = ${processId} AND user_id = ${req.userId}
+    `;
+
+    if (processResult.length === 0) {
       res.status(404).json({
         success: false,
         error: "İşlem bulunamadı.",
@@ -85,7 +86,11 @@ router.post("/parse-pdf", authenticate, upload.single("pdf"), async (req: AuthRe
     }
 
     // Save PDF relation to process
-    db.data!.processes[processIndex].pdfFile = pdfUrl;
+    await sql`
+      UPDATE processes 
+      SET pdf_file = ${pdfUrl}
+      WHERE id = ${processId} AND user_id = ${req.userId}
+    `;
 
     const { text, totalPages } = await extractTextFromPDF(req.file.buffer);
     const result = parseTextToCompanies(text, totalPages);
@@ -102,9 +107,13 @@ router.post("/parse-pdf", authenticate, upload.single("pdf"), async (req: AuthRe
       userId: req.userId!,
     }));
 
-    // Save companies to database
-    db.data!.companies.push(...companies);
-    await db.write();
+    // Save companies to database sequentially to avoid overwhelming connection pool
+    for (const c of companies) {
+      await sql`
+        INSERT INTO companies (id, name, phone, raw_phone, message, sent, process_id, user_id, created_at)
+        VALUES (${c.id}, ${c.name}, ${c.phone}, ${c.rawPhone}, ${c.message}, ${c.sent}, ${c.processId}, ${c.userId}, ${c.createdAt})
+      `;
+    }
 
     res.json({
       success: true,

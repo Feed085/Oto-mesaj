@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { db } from "../db.js";
+import { sql } from "../db.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.js";
 
 const router = Router();
@@ -7,11 +7,21 @@ const router = Router();
 // Get all processes for authenticated user
 router.get("/", authenticate, async (req: AuthRequest, res) => {
   try {
-    await db.read();
-    const userProcesses = db.data?.processes.filter(p => p.userId === req.userId) || [];
+    const userProcesses = await sql`
+      SELECT id, name, description, pdf_file as "pdfFile", user_id as "userId", created_at as "createdAt"
+      FROM processes
+      WHERE user_id = ${req.userId}
+      ORDER BY created_at DESC
+    `;
+
+    const formattedProcesses = userProcesses.map(p => ({
+      ...p,
+      createdAt: Number(p.createdAt),
+    }));
+
     res.json({
       success: true,
-      data: userProcesses.sort((a, b) => b.createdAt - a.createdAt),
+      data: formattedProcesses,
     });
   } catch (error) {
     const message =
@@ -36,22 +46,25 @@ router.post("/", authenticate, async (req: AuthRequest, res) => {
       return;
     }
 
-    await db.read();
+    const processId = `process-${Date.now()}`;
+    const createdAt = Date.now();
+    const nameTrimmed = name.trim();
+    const descTrimmed = description?.trim() || null;
 
-    const newProcess = {
-      id: `process-${Date.now()}`,
-      name: name.trim(),
-      description: description?.trim() || undefined,
-      createdAt: Date.now(),
-      userId: req.userId!,
-    };
-
-    db.data!.processes.push(newProcess);
-    await db.write();
+    await sql`
+      INSERT INTO processes (id, name, description, user_id, created_at)
+      VALUES (${processId}, ${nameTrimmed}, ${descTrimmed}, ${req.userId}, ${createdAt})
+    `;
 
     res.json({
       success: true,
-      data: newProcess,
+      data: {
+        id: processId,
+        name: nameTrimmed,
+        description: descTrimmed || undefined,
+        createdAt,
+        userId: req.userId,
+      },
     });
   } catch (error) {
     const message =
@@ -69,12 +82,14 @@ router.patch("/:id", authenticate, async (req: AuthRequest, res) => {
     const { id } = req.params;
     const { pdfFile } = req.body;
 
-    await db.read();
-    const processIndex = db.data?.processes.findIndex(
-      (p) => p.id === id && p.userId === req.userId
-    );
+    const result = await sql`
+      UPDATE processes
+      SET pdf_file = ${pdfFile}
+      WHERE id = ${id} AND user_id = ${req.userId}
+      RETURNING id, name, description, pdf_file as "pdfFile", user_id as "userId", created_at as "createdAt"
+    `;
 
-    if (processIndex === undefined || processIndex === -1) {
+    if (result.length === 0) {
       res.status(404).json({
         success: false,
         error: "İşlem bulunamadı.",
@@ -82,12 +97,13 @@ router.patch("/:id", authenticate, async (req: AuthRequest, res) => {
       return;
     }
 
-    db.data!.processes[processIndex].pdfFile = pdfFile;
-    await db.write();
-
+    const updated = result[0];
     res.json({
       success: true,
-      data: db.data!.processes[processIndex],
+      data: {
+        ...updated,
+        createdAt: Number(updated.createdAt),
+      },
     });
   } catch (error) {
     const message =
@@ -104,26 +120,19 @@ router.delete("/:id", authenticate, async (req: AuthRequest, res) => {
   try {
     const { id } = req.params;
 
-    await db.read();
-    const processIndex = db.data?.processes.findIndex(
-      (p) => p.id === id && p.userId === req.userId
-    );
+    const result = await sql`
+      DELETE FROM processes
+      WHERE id = ${id} AND user_id = ${req.userId}
+      RETURNING id
+    `;
 
-    if (processIndex === undefined || processIndex === -1) {
+    if (result.length === 0) {
       res.status(404).json({
         success: false,
         error: "İşlem bulunamadı.",
       });
       return;
     }
-
-    // Delete the process
-    db.data!.processes.splice(processIndex, 1);
-
-    // Delete associated companies
-    db.data!.companies = db.data!.companies.filter(c => c.processId !== id);
-
-    await db.write();
 
     res.json({
       success: true,

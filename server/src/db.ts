@@ -1,97 +1,60 @@
-import { Low } from 'lowdb';
-import { JSONFile } from 'lowdb/node';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import { put } from '@vercel/blob';
+import { neon } from '@neondatabase/serverless';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const dbFile = process.env.VERCEL 
-  ? join('/tmp', 'db.json') 
-  : join(__dirname, '../data/db.json');
-
-interface Data {
-  users: Array<{
-    id: string;
-    email: string;
-    password: string;
-    name: string;
-    createdAt: number;
-  }>;
-  processes: Array<{
-    id: string;
-    name: string;
-    description?: string;
-    createdAt: number;
-    pdfFile?: string;
-    userId: string;
-  }>;
-  companies: Array<{
-    id: string;
-    name: string;
-    phone: string;
-    rawPhone: string;
-    message: string;
-    sent: boolean;
-    createdAt: number;
-    processId: string;
-    userId: string;
-  }>;
+if (!process.env.DATABASE_URL) {
+  console.warn("WARNING: DATABASE_URL environment variable is not defined!");
 }
 
-const defaultData: Data = {
-  users: [],
-  processes: [],
-  companies: [],
-};
-
-const adapter = new JSONFile<Data>(dbFile);
-const db = new Low<Data>(adapter, defaultData);
-
-// Override write to also save to Blob Storage on Vercel
-const originalWrite = db.write.bind(db);
-db.write = async function() {
-  await originalWrite();
-  
-  // On Vercel, also save to Blob Storage
-  if (process.env.VERCEL && process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      const fs = await import('fs');
-      const data = fs.readFileSync(dbFile, 'utf-8');
-      await put('db.json', data, { access: 'public' });
-    } catch (error) {
-      console.error('Failed to save to blob storage:', error);
-    }
-  }
-};
+const sql = neon(process.env.DATABASE_URL || "");
 
 export async function initDb() {
-  // On Vercel, try to load from Blob Storage first
-  if (process.env.VERCEL && process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      const { list } = await import('@vercel/blob');
-      const { blobs } = await list();
-      // Sort blobs by uploadedAt descending to get the newest db.json first
-      const dbBlobs = blobs
-        .filter(b => b.pathname === 'db.json')
-        .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
-      
-      const dbBlob = dbBlobs[0];
-      if (dbBlob) {
-        const fs = await import('fs');
-        const response = await fetch(dbBlob.url);
-        const data = await response.text();
-        fs.writeFileSync(dbFile, data);
-      }
-    } catch (error) {
-      // Blob doesn't exist yet, that's fine
-      console.log('No existing blob found, starting fresh');
-    }
+  if (!process.env.DATABASE_URL) {
+    console.error("DATABASE_URL is not set. Database initialization skipped.");
+    return;
   }
   
-  await db.read();
-  db.data ||= defaultData;
-  await db.write();
+  try {
+    // Create users table
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR(255) PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        created_at BIGINT NOT NULL
+      );
+    `;
+
+    // Create processes table
+    await sql`
+      CREATE TABLE IF NOT EXISTS processes (
+        id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        pdf_file TEXT,
+        user_id VARCHAR(255) REFERENCES users(id) ON DELETE CASCADE,
+        created_at BIGINT NOT NULL
+      );
+    `;
+
+    // Create companies table
+    await sql`
+      CREATE TABLE IF NOT EXISTS companies (
+        id VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        phone VARCHAR(255) NOT NULL,
+        raw_phone VARCHAR(255) NOT NULL,
+        message TEXT,
+        sent BOOLEAN DEFAULT FALSE,
+        process_id VARCHAR(255) REFERENCES processes(id) ON DELETE CASCADE,
+        user_id VARCHAR(255) REFERENCES users(id) ON DELETE CASCADE,
+        created_at BIGINT NOT NULL
+      );
+    `;
+    console.log("Database initialized successfully.");
+  } catch (error) {
+    console.error("Database initialization failed:", error);
+    throw error;
+  }
 }
 
-export { db };
-
+export { sql };

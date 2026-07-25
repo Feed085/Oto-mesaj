@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { db } from "../db.js";
+import { sql } from "../db.js";
 import { authenticate, type AuthRequest } from "../middleware/auth.js";
 
 const router = Router();
@@ -7,11 +7,20 @@ const router = Router();
 // Get all companies for authenticated user
 router.get("/", authenticate, async (req: AuthRequest, res) => {
   try {
-    await db.read();
-    const userCompanies = db.data?.companies.filter(c => c.userId === req.userId) || [];
+    const userCompanies = await sql`
+      SELECT id, name, phone, raw_phone as "rawPhone", message, sent, process_id as "processId", user_id as "userId", created_at as "createdAt"
+      FROM companies
+      WHERE user_id = ${req.userId}
+    `;
+
+    const formattedCompanies = userCompanies.map(c => ({
+      ...c,
+      createdAt: Number(c.createdAt),
+    }));
+
     res.json({
       success: true,
-      data: userCompanies,
+      data: formattedCompanies,
     });
   } catch (error) {
     const message =
@@ -29,12 +38,14 @@ router.patch("/:id", authenticate, async (req: AuthRequest, res) => {
     const { id } = req.params;
     const { sent } = req.body;
 
-    await db.read();
-    const companyIndex = db.data?.companies.findIndex(
-      (c) => c.id === id && c.userId === req.userId
-    );
+    const result = await sql`
+      UPDATE companies
+      SET sent = ${sent}
+      WHERE id = ${id} AND user_id = ${req.userId}
+      RETURNING id, name, phone, raw_phone as "rawPhone", message, sent, process_id as "processId", user_id as "userId", created_at as "createdAt"
+    `;
 
-    if (companyIndex === undefined || companyIndex === -1) {
+    if (result.length === 0) {
       res.status(404).json({
         success: false,
         error: "Şirket bulunamadı.",
@@ -42,12 +53,13 @@ router.patch("/:id", authenticate, async (req: AuthRequest, res) => {
       return;
     }
 
-    db.data!.companies[companyIndex].sent = sent;
-    await db.write();
-
+    const updated = result[0];
     res.json({
       success: true,
-      data: db.data!.companies[companyIndex],
+      data: {
+        ...updated,
+        createdAt: Number(updated.createdAt),
+      },
     });
   } catch (error) {
     const message =
@@ -64,11 +76,12 @@ router.delete("/process/:processId", authenticate, async (req: AuthRequest, res)
   try {
     const { processId } = req.params;
 
-    await db.read();
-    
     // Verify process belongs to user
-    const process = db.data?.processes.find(p => p.id === processId && p.userId === req.userId);
-    if (!process) {
+    const processResult = await sql`
+      SELECT id FROM processes WHERE id = ${processId} AND user_id = ${req.userId}
+    `;
+    
+    if (processResult.length === 0) {
       res.status(404).json({
         success: false,
         error: "İşlem bulunamadı.",
@@ -77,8 +90,9 @@ router.delete("/process/:processId", authenticate, async (req: AuthRequest, res)
     }
 
     // Delete companies for this process
-    db.data!.companies = db.data!.companies.filter(c => c.processId !== processId);
-    await db.write();
+    await sql`
+      DELETE FROM companies WHERE process_id = ${processId} AND user_id = ${req.userId}
+    `;
 
     res.json({
       success: true,

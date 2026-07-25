@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
-import { db } from '../db.js';
+import { sql } from '../db.js';
 import { generateToken } from '../middleware/auth.js';
 
 const router = Router();
@@ -20,36 +20,32 @@ router.post('/register', async (req, res) => {
       return;
     }
 
-    await db.read();
-
-    const existingUser = db.data?.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (existingUser) {
+    const emailLower = email.toLowerCase();
+    const existingUsers = await sql`SELECT * FROM users WHERE email = ${emailLower}`;
+    if (existingUsers.length > 0) {
       res.status(400).json({ success: false, error: 'Bu e-posta zaten kayıtlı.' });
       return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      id: `user-${Date.now()}`,
-      email,
-      password: hashedPassword,
-      name,
-      createdAt: Date.now(),
-    };
+    const userId = `user-${Date.now()}`;
+    const createdAt = Date.now();
 
-    db.data!.users.push(newUser);
-    await db.write();
+    await sql`
+      INSERT INTO users (id, email, password, name, created_at)
+      VALUES (${userId}, ${email}, ${hashedPassword}, ${name}, ${createdAt})
+    `;
 
-    const token = generateToken(newUser.id);
+    const token = generateToken(userId);
 
     res.json({
       success: true,
       data: {
         user: {
-          id: newUser.id,
-          email: newUser.email,
-          name: newUser.name,
-          createdAt: newUser.createdAt,
+          id: userId,
+          email,
+          name,
+          createdAt,
         },
         token,
       },
@@ -70,14 +66,15 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    await db.read();
-
-    const user = db.data?.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (!user) {
+    const emailLower = email.toLowerCase();
+    const users = await sql`SELECT * FROM users WHERE email = ${emailLower}`;
+    
+    if (users.length === 0) {
       res.status(401).json({ success: false, error: 'Bu hesap kayıtlı değil.' });
       return;
     }
 
+    const user = users[0];
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       res.status(401).json({ success: false, error: 'Şifre yanlış.' });
@@ -93,7 +90,7 @@ router.post('/login', async (req, res) => {
           id: user.id,
           email: user.email,
           name: user.name,
-          createdAt: user.createdAt,
+          createdAt: Number(user.created_at || user.createdAt),
         },
         token,
       },
