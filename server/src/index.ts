@@ -17,7 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded PDFs statically
-app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/api/uploads", express.static(
+  process.env.VERCEL ? "/tmp/uploads" : path.join(__dirname, "../uploads")
+));
 
 app.use("/api", pdfRoutes);
 app.use("/api/processes", processRoutes);

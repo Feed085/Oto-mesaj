@@ -16,7 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded PDFs statically (fallback / development compatibility)
-app.use("/api/uploads", express.static(path.join(__dirname, "../server/uploads")));
+app.use("/api/uploads", express.static(
+  process.env.VERCEL ? "/tmp/uploads" : path.join(__dirname, "../server/uploads")
+));
 
 // Lazy database initialization middleware for Serverless context
 let dbInitialized = false;
