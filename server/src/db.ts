@@ -70,7 +70,12 @@ export async function initDb() {
     try {
       const { list } = await import('@vercel/blob');
       const { blobs } = await list();
-      const dbBlob = blobs.find(b => b.pathname === 'db.json');
+      // Sort blobs by uploadedAt descending to get the newest db.json first
+      const dbBlobs = blobs
+        .filter(b => b.pathname === 'db.json')
+        .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
+      
+      const dbBlob = dbBlobs[0];
       if (dbBlob) {
         const fs = await import('fs');
         const response = await fetch(dbBlob.url);

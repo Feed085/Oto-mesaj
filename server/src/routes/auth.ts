@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
 
     await db.read();
 
-    const existingUser = db.data?.users.find(u => u.email === email);
+    const existingUser = db.data?.users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (existingUser) {
       res.status(400).json({ success: false, error: 'Bu e-posta zaten kayıtlı.' });
       return;
@@ -72,15 +72,15 @@ router.post('/login', async (req, res) => {
 
     await db.read();
 
-    const user = db.data?.users.find(u => u.email === email);
+    const user = db.data?.users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (!user) {
-      res.status(401).json({ success: false, error: 'Geçersiz e-posta veya şifre.' });
+      res.status(401).json({ success: false, error: 'Bu hesap kayıtlı değil.' });
       return;
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      res.status(401).json({ success: false, error: 'Geçersiz e-posta veya şifre.' });
+      res.status(401).json({ success: false, error: 'Şifre yanlış.' });
       return;
     }
 
