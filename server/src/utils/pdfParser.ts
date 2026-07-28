@@ -13,6 +13,57 @@ const ARABIC_CHAR_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF
 const ARABIC_CHAR_RANGE =
   /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g;
 
+/**
+ * PDF'den çıkarılan metinde Azerbaycan diline özgü karakterlerin
+ * hatalı encoding nedeniyle bozulmasını düzeltir.
+ *
+ * pdfjs-dist bazı PDF'lerdeki ə (\u0259) ve Ə (\u018F) gibi
+ * Azerbaycan harflerini farklı Unicode noktaları veya glyph
+ * eşlemeleri ile çıkarabilir. Bu fonksiyon bilinen hatalı
+ * eşlemeleri doğru karakterlerle değiştirir.
+ */
+function normalizeAzerbaijaniChars(text: string): string {
+  return (
+    text
+      // --- ə (küçük schwa) için yanlış glyph eşlemeleri ---
+      // Bazı PDF fontları ə için \u00E6 (æ) kullanır
+      .replace(/\u00E6/g, "ə")
+      // Bazı PDF fontları ə için \u00F6 (ö) kullanır (Azerbaycan fontlarında)
+      // NOT: ö gerçekten ö olabilir; bu satırı yalnızca
+      // Azerbaycan-spesifik fontlarda etkinleştirin
+      // .replace(/\u00F6/g, 'ə')
+      // Bazı fontlar ə yerine Latin Small Schwa (\u0259) üretir — zaten doğru
+      // Bazı fontlar ə yerine \uFB01 (fi ligature) benzeri özel kodlar kullanır
+      .replace(/\uFB01/g, "fi") // fi ligature → fi (bunu düzelt)
+      .replace(/\uFB02/g, "fl") // fl ligature → fl (bunu düzelt)
+      // --- Ə (büyük schwa) için yanlış glyph eşlemeleri ---
+      .replace(/\u00C6/g, "Ə") // Æ → Ə
+      // --- Diğer Azerbaycan harfleri ---
+      // ğ için olası bozulmalar
+      .replace(/\u011F/g, "ğ") // zaten ğ, kontrol amaçlı
+      // ş için olası bozulmalar
+      .replace(/\u015F/g, "ş") // zaten ş, kontrol amaçlı
+      // ı (noktasız i) için olası bozulmalar
+      .replace(/\u0131/g, "ı") // zaten ı, kontrol amaçlı
+      // İ (noktalı I) için olası bozulmalar
+      .replace(/\u0130/g, "İ") // zaten İ, kontrol amaçlı
+      // ç için olası bozulmalar
+      .replace(/\u00E7/g, "ç") // zaten ç, kontrol amaçlı
+      // Ç için olası bozulmalar
+      .replace(/\u00C7/g, "Ç") // zaten Ç, kontrol amaçlı
+      // --- Bazı PDF'lerde ə glyph'i yanlış private-use alanına düşer ---
+      // Windows-1252 / Mac-Roman bozulmaları için:
+      .replace(/\u008E/g, "Ş") // Windows-1252 0x8E → Ş
+      .replace(/\u009E/g, "ş") // Windows-1252 0x9E → ş
+      .replace(/\u008A/g, "Š") // Windows-1252 0x8A → S (ş benzeri)
+      // Yanlış kodlanan ə: bazı fontlarda \u0065\u0300 (e + birleşik grave) olarak gelir
+      .replace(/e\u0300/g, "ə")
+      .replace(/E\u0300/g, "Ə")
+      // Bazı fontlarda ə \u01DD (turned e) olarak gelir
+      .replace(/\u01DD/g, "ə")
+  );
+}
+
 function hasArabic(text: string): boolean {
   return ARABIC_CHAR_REGEX.test(text);
 }
@@ -203,7 +254,7 @@ export async function extractTextFromPDF(
           pageText += " ";
         }
 
-        pageText += item.str;
+        pageText += normalizeAzerbaijaniChars(item.str);
         lastY = y;
       }
     }
