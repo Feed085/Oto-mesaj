@@ -10,7 +10,7 @@ export function useCompanies() {
     const saved = localStorage.getItem("message_template");
     return saved !== null ? saved : "Merhaba, {ad} , sayfanızı gördüm. Bir sorum olacak: öğrencilerinizin sınav/deneme sonuçlarını şu an nasıl takip ediyorsunuz, elle mi yoksa bir sistemle mi?";
   });
-
+//saaam
   useEffect(() => {
     localStorage.setItem("message_template", template);
   }, [template]);
