@@ -238,24 +238,45 @@ export async function extractTextFromPDF(
     const lineBreakThreshold = computeLineBreakThreshold(content.items);
 
     let lastY: number | null = null;
+    // Son öğenin x başlangıcı + genişliği = bitiş x konumu
+    let lastEndX: number | null = null;
     let pageText = "";
 
     for (const item of content.items) {
       if ("str" in item) {
+        const x = item.transform[4];
         const y = item.transform[5];
+        // pdfjs-dist item.width mevcut; yoksa 0 kabul et
+        const itemWidth = (item as any).width ?? 0;
 
         if (lastY !== null && Math.abs(y - lastY) > lineBreakThreshold) {
+          // Farklı satır → yeni satır
           pageText += "\n";
-        } else if (
-          pageText.length > 0 &&
-          !pageText.endsWith(" ") &&
-          !item.str.startsWith(" ")
-        ) {
-          pageText += " ";
+          lastEndX = null;
+        } else if (pageText.length > 0 && !item.str.startsWith(" ")) {
+          if (lastEndX !== null) {
+            // Önceki öğenin bitişi ile bu öğenin başlangıcı arasındaki boşluk
+            // Pozitif boşluk varsa ve ortalama karakter genişliğinden büyükse boşluk ekle.
+            // Küçük negatif değerler veya sıfıra yakın değerler = bitişik glyph (ə gibi ayrı span'lar)
+            const gap = x - lastEndX;
+            // Eşik: öğenin harf başına düşen genişliğinin %30'u kadar gap varsa boşluk ekle
+            const charWidth = itemWidth > 0 && item.str.length > 0
+              ? itemWidth / item.str.length
+              : 3;
+            const spaceThreshold = charWidth * 0.30;
+
+            if (gap > spaceThreshold && !pageText.endsWith(" ")) {
+              pageText += " ";
+            }
+          } else if (!pageText.endsWith(" ")) {
+            // İlk öğe ya da satır başlangıcı sonrası
+            pageText += " ";
+          }
         }
 
         pageText += normalizeAzerbaijaniChars(item.str);
         lastY = y;
+        lastEndX = x + itemWidth;
       }
     }
 
